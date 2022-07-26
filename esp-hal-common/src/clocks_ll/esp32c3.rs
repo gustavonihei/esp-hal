@@ -216,6 +216,7 @@ pub(crate) fn esp32c3_rtc_freq_to_pll_mhz(cpu_clock_speed: CpuClock) {
             w.cpuperiod_sel().bits(match cpu_clock_speed {
                 CpuClock::Clock80MHz => 0,
                 CpuClock::Clock160MHz => 1,
+                _ => unreachable!(), // will never happen
             })
         });
         ets_update_cpu_frequency(cpu_clock_speed.mhz());

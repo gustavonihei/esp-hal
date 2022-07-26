@@ -24,6 +24,8 @@ pub trait Clock {
 /// CPU clock speed
 #[derive(Debug, Clone, Copy)]
 pub enum CpuClock {
+    #[cfg(feature = "esp32c3")]
+    Clock40MHz,
     Clock80MHz,
     Clock160MHz,
     #[cfg(not(feature = "esp32c3"))]
@@ -34,6 +36,8 @@ pub enum CpuClock {
 impl Clock for CpuClock {
     fn frequency(&self) -> MegahertzU32 {
         match self {
+            #[cfg(feature = "esp32c3")]
+            CpuClock::Clock40MHz => MegahertzU32::MHz(40),
             CpuClock::Clock80MHz => MegahertzU32::MHz(80),
             CpuClock::Clock160MHz => MegahertzU32::MHz(160),
             #[cfg(not(feature = "esp32c3"))]
