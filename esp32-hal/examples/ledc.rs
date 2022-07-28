@@ -10,7 +10,7 @@ use esp32_hal::{
     gpio::IO,
     Serial,
     timer::TimerGroup,
-    RtcCntl,
+    Rtc,
     clock::ClockControl,
     prelude::*,
     pac::Peripherals,
@@ -32,11 +32,11 @@ fn main() -> ! {
     let timer_group0 = TimerGroup::new(peripherals.TIMG0, &clocks);
     let mut wdt = timer_group0.wdt;
     let mut serial0 = Serial::new(peripherals.UART0);
-    let mut rtc_cntl = RtcCntl::new(peripherals.RTC_CNTL);
+    let mut rtc = Rtc::new(peripherals.RTC_CNTL);
 
     // Disable watchdog timer
     wdt.disable();
-    rtc_cntl.set_wdt_global_enable(false);
+    rtc.rwdt.disable();
 
     let io = IO::new(peripherals.GPIO, peripherals.IO_MUX);
     let led = io.pins.gpio4.into_push_pull_output();

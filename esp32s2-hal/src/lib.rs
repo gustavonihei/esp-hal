@@ -20,7 +20,7 @@ pub use esp_hal_common::{
     Delay,
     PulseControl,
     Rng,
-    RtcCntl,
+    Rtc,
     Serial,
 };
 
