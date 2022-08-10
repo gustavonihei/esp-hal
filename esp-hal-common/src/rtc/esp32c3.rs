@@ -81,6 +81,14 @@ pub(crate) fn init() {
 
     power_control_init();
 
+    // Force power down wifi and bt power domain
+    rtc_cntl
+        .dig_iso
+        .modify(|_, w| w.wifi_force_iso().set_bit().bt_force_iso().set_bit());
+    rtc_cntl
+        .dig_pwc
+        .modify(|_, w| w.wifi_force_pd().set_bit().bt_force_pd().set_bit());
+
     unsafe {
         rtc_cntl.int_ena_rtc.write(|w| w.bits(0));
         rtc_cntl.int_clr_rtc.write(|w| w.bits(u32::MAX));
