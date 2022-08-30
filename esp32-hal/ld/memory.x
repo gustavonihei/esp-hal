@@ -13,13 +13,9 @@ INCLUDE "memory_extras.x"
 /* Specify main memory areas */
 MEMORY
 {
-  reserved_cache_seg     : ORIGIN = 0x40070000, len = 64k /* SRAM0; reserved for usage as flash cache*/
-  vectors_seg ( RX )     : ORIGIN = 0x40080000, len =  1k /* SRAM0 */
-  iram_seg ( RX )        : ORIGIN = 0x40080400, len = 128k-0x400 /* SRAM0 */
-
-  reserved_for_rom_seg   : ORIGIN = 0x3FFAE000, len = 8k /* SRAM2; reserved for usage by the ROM */
-  dram_seg ( RW )        : ORIGIN = 0x3FFB0000 + RESERVE_DRAM, len = 176k - RESERVE_DRAM /* SRAM2+1; first 64kB used by BT if enable */
-  reserved_for_boot_seg  : ORIGIN = 0x3FFDC200, len = 144k /* SRAM1; reserved for static ROM usage; can be used for heap */
+  vectors_seg ( RX )     : ORIGIN = 0x40088000, len = 0x400 /* SRAM0 */
+  iram_seg ( RX )        : ORIGIN = 0x40088400, len = 0x18000 - 0x400 /* SRAM0 */
+  dram_seg ( RW )        : ORIGIN = 0x3FFE5A38 + RESERVE_DRAM, len = 0x1A5C8 - RESERVE_DRAM /* SRAM2+1; first 64kB used by BT if enable */
 
   /* external flash 
      The 0x20 offset is a convenience for the app binary image generation.
@@ -168,13 +164,11 @@ SECTIONS {
 _external_ram_start = ABSOLUTE(ORIGIN(psram_seg));
 _external_ram_end = ABSOLUTE(ORIGIN(psram_seg)+LENGTH(psram_seg));
 
-_heap_end = ABSOLUTE(ORIGIN(dram_seg))+LENGTH(dram_seg)+LENGTH(reserved_for_boot_seg) - 2*STACK_SIZE;
+_heap_end = ABSOLUTE(ORIGIN(dram_seg))+LENGTH(dram_seg) - STACK_SIZE;
 _text_heap_end = ABSOLUTE(ORIGIN(iram_seg)+LENGTH(iram_seg));
 _external_heap_end = ABSOLUTE(ORIGIN(psram_seg)+LENGTH(psram_seg));
 
-_stack_start_cpu1 = _heap_end;
-_stack_end_cpu1 = _stack_start_cpu1 + STACK_SIZE;
-_stack_start_cpu0 = _stack_end_cpu1;
+_stack_start_cpu0 = _heap_end;
 _stack_end_cpu0 = _stack_start_cpu0 + STACK_SIZE;
 
 EXTERN(DefaultHandler);
