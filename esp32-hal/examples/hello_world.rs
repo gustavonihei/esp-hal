@@ -37,7 +37,7 @@ fn main() -> ! {
     timer0.start(1u64.secs());
 
     loop {
-        writeln!(serial0, "Hello world!").unwrap();
+        writeln!(serial0, "\r\nAPP_CPU: Hello from Rust!\r").unwrap();
         block!(timer0.wait()).unwrap();
     }
 }
